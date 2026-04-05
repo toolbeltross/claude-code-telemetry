@@ -1,0 +1,20 @@
+# Internal dev docs
+docs/
+
+# Source code (dist/ has the built frontend)
+src/
+
+# Gist publishing artifacts
+scripts/gist/
+
+# Internal prompt templates
+scripts/supervisory-agent-prompt.md
+scripts/supervisory-agent-prompt-v2.md
+
+# Unused drafts
+scripts/tool-validator-v2.js
+
+# Dev/test files
+tests/
+CLAUDE.md
+.claude/
