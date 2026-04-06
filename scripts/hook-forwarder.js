@@ -13,7 +13,7 @@ import { appendFile } from 'fs/promises';
 import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
-import { BASE_URL, HOOK_FORWARDER_TIMEOUT_MS, DEFAULT_CONTEXT_WINDOW_SIZE, IDLE_MARKER_PATH, apiUrl } from '../server/config.js';
+import { BASE_URL, HOOK_FORWARDER_TIMEOUT_MS, DEFAULT_CONTEXT_WINDOW_SIZE, IDLE_MARKER_PATH, apiUrl, resolveContextWindowSize } from '../server/config.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(__dirname, '..');
@@ -185,7 +185,7 @@ function parseTranscript(transcriptPath) {
                    (usage.cacheRead / 1e6) * p.cacheRead + (usage.cacheWrite / 1e6) * p.cacheWrite;
     }
 
-    const contextSize = DEFAULT_CONTEXT_WINDOW_SIZE;
+    const contextSize = resolveContextWindowSize(DEFAULT_CONTEXT_WINDOW_SIZE, null);
     // Context fill = last API call's input side (what was sent to the model)
     const lastContextUsed = lastInput + lastCacheRead + lastCacheWrite;
     const fillPct = Math.min(100, Math.round(lastContextUsed / contextSize * 100));
@@ -241,7 +241,7 @@ if (mode === 'status') {
     const model = modelFull.replace(/\s*\(.*\)/, '');  // "Opus 4.6 (1M context)" → "Opus 4.6"
     const cost = (input.cost?.total_cost_usd || 0).toFixed(2);
     const ctxPct = Math.round(input.context_window?.used_percentage || 0);
-    const ctxWindowSize = input.context_window?.context_window_size || DEFAULT_CONTEXT_WINDOW_SIZE;
+    const ctxWindowSize = resolveContextWindowSize(input.context_window?.context_window_size, modelFull);
     const ctxSizeK = Math.round(ctxWindowSize / 1000);
     const curUsage = input.context_window?.current_usage;
     const inputTokens = curUsage?.input_tokens || 0;

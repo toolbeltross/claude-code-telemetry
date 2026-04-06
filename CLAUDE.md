@@ -319,7 +319,7 @@ Dark theme with monospace fonts. Key Tailwind colors:
 
 ## Known Issues / TODO
 
-- Context window uses 200K limit for file-based sessions (model-specific lookup exists but all current models are 200K)
+- Context window defaults to 200K for file-based sessions; 1M-context models detected via model display name containing "(1M context)"
 - Build warning: bundle >500KB (Recharts is large) — could code-split
 - Supervisory agent (Stop hook type "agent") requires Claude Code to support agent hook type
 - Not yet published to npm — `npm publish` when ready

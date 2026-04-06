@@ -101,7 +101,7 @@ export default function MicroDashboard({
 
   // Context (Priority 1)
   const ctxPct = liveSession?.context_window?.used_percentage ?? 0;
-  const ctxSize = liveSession?.context_window?.context_window_size ?? 200000;
+  const ctxSize = liveSession?.context_window?._resolvedSize ?? liveSession?.context_window?.context_window_size ?? null;
   const totalTokens = liveSession?.context_window?.total_input_tokens ?? 0;
   const turnsLeft = liveSession?._estimatedTurnsRemaining ?? null;
   const barColor = ctxPct > 80 ? 'bg-red' : ctxPct > 50 ? 'bg-amber' : 'bg-accent';
@@ -225,7 +225,7 @@ export default function MicroDashboard({
 
       {/* Row 2: Context bar */}
       <div className="space-y-0.5"
-        title={`Context window: ${ctxPct}% used (${formatTokens(totalTokens)} / ${formatTokens(ctxSize)})${turnsLeft !== null ? ` \u2014 ~${turnsLeft} turns remaining` : ''}`}>
+        title={`Context window: ${ctxPct}% used (${formatTokens(totalTokens)} / ${ctxSize ? formatTokens(ctxSize) : '?'})${turnsLeft !== null ? ` \u2014 ~${turnsLeft} turns remaining` : ''}`}>
         <div className="flex items-center gap-2">
           <span className="text-[10px] uppercase text-gray-500 shrink-0 tracking-wider">Context</span>
           <div className="flex-1 h-2.5 bg-gray-800 rounded-full relative overflow-hidden">

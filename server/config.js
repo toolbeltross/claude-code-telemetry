@@ -32,6 +32,7 @@ export const MAX_SUBAGENT_HISTORY = 50;
 export const MAX_PROMPT_HISTORY = 10;
 export const MAX_CONTEXT_HISTORY = 20;
 export const DEFAULT_CONTEXT_WINDOW_SIZE = 200_000;
+export const EXTENDED_CONTEXT_WINDOW_SIZE = 1_000_000;
 
 // ── Pruning ──────────────────────────────────────────────────────────────────
 
@@ -95,4 +96,26 @@ export const IDLE_MARKER_PATH = join(HOME, '.claude', '.telemetry-idle');
 
 export function apiUrl(path = '') {
   return `${BASE_URL}${path}`;
+}
+
+/**
+ * Resolve actual context window size, accounting for extended-context models.
+ * Returns the reported size if provided, detects 1M from model name or token
+ * overshoot, or returns null if truly unknown. Never guesses.
+ * Env override: CLAUDE_CONTEXT_WINDOW_SIZE=1000000
+ */
+export function resolveContextWindowSize(reportedSize, modelDisplayName, totalInputTokens) {
+  // Env override (most reliable for known plan tier)
+  const envSize = parseInt(process.env.CLAUDE_CONTEXT_WINDOW_SIZE, 10);
+  if (envSize > 0) return envSize;
+  // Model name detection (e.g. "Opus 4.6 (1M context)")
+  if (modelDisplayName && /1m\s*context/i.test(modelDisplayName)) {
+    return EXTENDED_CONTEXT_WINDOW_SIZE;
+  }
+  // Auto-detect: if tokens exceed reported size, real limit must be higher
+  if (reportedSize && totalInputTokens && totalInputTokens > reportedSize) {
+    return EXTENDED_CONTEXT_WINDOW_SIZE;
+  }
+  // Return what was reported, or null if nothing was reported
+  return reportedSize ?? null;
 }

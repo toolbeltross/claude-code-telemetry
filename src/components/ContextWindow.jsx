@@ -14,9 +14,10 @@ export default function ContextWindow({ session, liveSession }) {
 
   // Prefer live statusLine data when available
   if (live) {
-    const fillPct = live.used_percentage ?? 0;
-    const contextLimit = live.context_window_size ?? 200000;
+    const rawCtxSize = live._resolvedSize ?? live.context_window_size;
+    const contextLimit = rawCtxSize ?? null; // null = unknown, don't guess
     const totalInput = live.total_input_tokens ?? 0;
+    const fillPct = live.used_percentage ?? 0;
     const usage = live.current_usage || {};
     const input = usage.input_tokens ?? 0;
     const output = usage.output_tokens ?? 0;
@@ -77,8 +78,12 @@ export default function ContextWindow({ session, liveSession }) {
               />
             </div>
           </div>
-          <span className="text-xs text-gray-400 shrink-0">{formatTokens(totalInput)} / {formatTokens(contextLimit)}</span>
-          <span className={`text-2xl font-mono font-bold shrink-0 ${fillPct > 80 ? 'text-red' : fillPct > 60 ? 'text-amber' : 'text-gray-200'}`}>{fillPct}%</span>
+          <span className="text-xs text-gray-400 shrink-0">
+            {formatTokens(totalInput)} / {contextLimit !== null ? formatTokens(contextLimit) : <span className="inline-block animate-pulse text-gray-500" title="Context window size not yet reported by Claude Code">?</span>}
+          </span>
+          <span className={`text-2xl font-mono font-bold shrink-0 ${fillPct > 80 ? 'text-red' : fillPct > 60 ? 'text-amber' : 'text-gray-200'}`}>
+            {contextLimit !== null ? `${fillPct}%` : <span className="animate-pulse text-gray-500" title="Waiting for context window size">?</span>}
+          </span>
         </div>
         {/* Row 2: Token breakdown — all horizontal, label above value */}
         <div className="flex items-center gap-4 mt-1">
@@ -106,10 +111,10 @@ export default function ContextWindow({ session, liveSession }) {
 
   // Fallback to file-based session data
   const { input, output, cacheRead, cacheWrite } = session.tokens;
-  const contextLimit = getContextLimit(session.primaryModelId);
+  const contextLimit = getContextLimit(session.primaryModelId); // may return null
   const effectiveTokens = input;
-  const fillPct = Math.min((effectiveTokens / contextLimit) * 100, 100);
-  const barColor = fillPct > 80 ? 'bg-red' : fillPct > 50 ? 'bg-amber' : 'bg-accent';
+  const fillPct = contextLimit ? Math.min((effectiveTokens / contextLimit) * 100, 100) : null;
+  const barColor = fillPct !== null ? (fillPct > 80 ? 'bg-red' : fillPct > 50 ? 'bg-amber' : 'bg-accent') : 'bg-gray-600';
   const cacheHit = cacheRead > 0 ? ((cacheRead / (cacheRead + input || 1)) * 100).toFixed(1) : null;
 
   return (
@@ -126,7 +131,7 @@ export default function ContextWindow({ session, liveSession }) {
           <div className="h-4 rounded-full bg-gray-800 overflow-hidden relative">
             <div
               className={`h-full rounded-full transition-all duration-500 ${barColor}`}
-              style={{ width: `${fillPct}%` }}
+              style={{ width: fillPct !== null ? `${fillPct}%` : '0%' }}
             />
             <span
               className="absolute top-0 bottom-0 w-px bg-amber/50"
@@ -140,8 +145,12 @@ export default function ContextWindow({ session, liveSession }) {
             />
           </div>
         </div>
-        <span className="text-xs text-gray-400 shrink-0">{formatTokens(effectiveTokens)} / {formatTokens(contextLimit)}</span>
-        <span className="text-2xl font-mono font-bold text-gray-200 shrink-0">{fillPct.toFixed(0)}%</span>
+        <span className="text-xs text-gray-400 shrink-0">
+          {formatTokens(effectiveTokens)} / {contextLimit ? formatTokens(contextLimit) : <span className="inline-block animate-pulse text-gray-500" title="Context window size unknown for this model">?</span>}
+        </span>
+        <span className="text-2xl font-mono font-bold text-gray-200 shrink-0">
+          {fillPct !== null ? `${fillPct.toFixed(0)}%` : <span className="animate-pulse text-gray-500" title="Waiting for context window size">?</span>}
+        </span>
       </div>
       <div className="flex items-center gap-4 mt-1">
         <StackedStat label="Uncached" value={formatTokens(input)} color="text-blue" tooltip="Uncached input tokens for this API call — tokens not served from cache" />
@@ -287,13 +296,14 @@ function VelocityRow({ liveData }) {
 }
 
 function getContextLimit(modelId) {
-  if (!modelId) return 200000;
-  // All current Claude models use 200K. Update when new limits ship.
+  if (!modelId) return null;
+  if (/\[1m\]/.test(modelId)) return 1_000_000;
+  // Only return a value for models we're confident about
   const limits = {
     'claude-opus-4': 200000,
     'claude-sonnet-4': 200000,
     'claude-haiku-4': 200000,
   };
   const match = Object.entries(limits).find(([k]) => modelId.includes(k));
-  return match ? match[1] : 200000;
+  return match ? match[1] : null;
 }

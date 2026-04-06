@@ -13,7 +13,7 @@
  */
 import http from 'node:http';
 import { readFileSync } from 'node:fs';
-import { BASE_URL, STATUSLINE_TIMEOUT_MS, DEFAULT_CONTEXT_WINDOW_SIZE, IDLE_MARKER_PATH } from '../server/config.js';
+import { BASE_URL, STATUSLINE_TIMEOUT_MS, DEFAULT_CONTEXT_WINDOW_SIZE, IDLE_MARKER_PATH, resolveContextWindowSize } from '../server/config.js';
 
 const TIMEOUT = STATUSLINE_TIMEOUT_MS;
 
@@ -172,7 +172,8 @@ try {
   const linesAdd   = d.cost?.total_lines_added ?? 0;
   const linesRm    = d.cost?.total_lines_removed ?? 0;
   const ctxPct     = d.context_window?.used_percentage ?? 0;
-  const ctxSize    = d.context_window?.context_window_size ?? DEFAULT_CONTEXT_WINDOW_SIZE;
+  const modelName  = d.model?.display_name || '';
+  const ctxSize    = resolveContextWindowSize(d.context_window?.context_window_size, modelName);
   const inTokens   = d.context_window?.total_input_tokens ?? 0;
   const outTokens  = d.context_window?.total_output_tokens ?? 0;
   const curIn      = d.context_window?.current_usage?.input_tokens ?? 0;

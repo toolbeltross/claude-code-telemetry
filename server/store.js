@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import {
   MAX_TOOL_EVENTS, MAX_TURN_HISTORY, MAX_SUBAGENT_HISTORY,
   MAX_PROMPT_HISTORY, MAX_CONTEXT_HISTORY, DEFAULT_CONTEXT_WINDOW_SIZE,
-  STALE_SESSION_MS, FORCE_REFRESH_MS,
+  STALE_SESSION_MS, FORCE_REFRESH_MS, resolveContextWindowSize,
 } from './config.js';
 import { FailureStore } from './failure-store.js';
 
@@ -148,8 +148,19 @@ class Store extends EventEmitter {
     data._costDelta = (existing._costDelta ?? 0) + (costDelta > 0 ? costDelta : 0);
     data._prevCost = newCost;
 
-    // Context velocity tracking
-    const newCtxPct = data.context_window?.used_percentage ?? 0;
+    // Context velocity tracking — recalculate percentage for extended-context models
+    const modelDisplayName = data.model?.display_name || data.model?.id || '';
+    const totalInputTokens = data.context_window?.total_input_tokens ?? 0;
+    const resolvedCtxSize = resolveContextWindowSize(data.context_window?.context_window_size, modelDisplayName, totalInputTokens);
+    const reportedCtxSize = data.context_window?.context_window_size;
+    let newCtxPct = data.context_window?.used_percentage ?? 0;
+    // Stamp resolved size onto context_window so frontend can use it directly
+    if (data.context_window) {
+      data.context_window._resolvedSize = resolvedCtxSize; // may be null
+    }
+    if (resolvedCtxSize && reportedCtxSize && resolvedCtxSize !== reportedCtxSize && totalInputTokens > 0) {
+      newCtxPct = Math.min(100, Math.round((totalInputTokens / resolvedCtxSize) * 100));
+    }
     const ctxHistory = [...(existing._contextHistory || [])];
     ctxHistory.push({ pct: newCtxPct, ts: Date.now() });
     if (ctxHistory.length > MAX_CONTEXT_HISTORY) ctxHistory.shift();
@@ -267,11 +278,14 @@ class Store extends EventEmitter {
       }
       if (tokenDeltas.length > 0) {
         session._tokensPerTurn = Math.round(tokenDeltas.reduce((a, b) => a + b, 0) / tokenDeltas.length);
-        const contextLimit = session.context_window?.context_window_size ?? DEFAULT_CONTEXT_WINDOW_SIZE;
-        const remaining = contextLimit - totalTokens;
-        session._estimatedTurnsRemaining = session._tokensPerTurn > 0
-          ? Math.max(0, Math.round(remaining / session._tokensPerTurn))
-          : null;
+        const modelName = session.model?.display_name || session._currentModel || '';
+        const contextLimit = resolveContextWindowSize(session.context_window?.context_window_size, modelName, totalTokens);
+        if (contextLimit && session._tokensPerTurn > 0) {
+          const remaining = contextLimit - totalTokens;
+          session._estimatedTurnsRemaining = Math.max(0, Math.round(remaining / session._tokensPerTurn));
+        } else {
+          session._estimatedTurnsRemaining = null;
+        }
       }
     }
 

@@ -13,6 +13,11 @@
 'use strict';
 
 const DEFAULT_CONTEXT_WINDOW_SIZE = 200_000;
+const EXTENDED_CONTEXT_WINDOW_SIZE = 1_000_000;
+function resolveCtxSize(reported, modelName) {
+  if (modelName && /1m\s*context/i.test(modelName)) return EXTENDED_CONTEXT_WINDOW_SIZE;
+  return reported ?? DEFAULT_CONTEXT_WINDOW_SIZE;
+}
 
 function readStdin() {
   return new Promise((resolve) => {
@@ -66,7 +71,7 @@ async function main() {
     const model = modelFull.replace(/\s*\(.*\)/, '');
     const cost = (input.cost?.total_cost_usd || 0).toFixed(2);
     const ctxPct = Math.round(input.context_window?.used_percentage || 0);
-    const ctxWindowSize = input.context_window?.context_window_size || DEFAULT_CONTEXT_WINDOW_SIZE;
+    const ctxWindowSize = resolveCtxSize(input.context_window?.context_window_size, modelFull);
     const ctxSizeK = Math.round(ctxWindowSize / 1000);
     const curUsage = input.context_window?.current_usage;
     const inputTokens = curUsage?.input_tokens || 0;

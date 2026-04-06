@@ -4,7 +4,7 @@
 
 import { readFile } from 'fs/promises';
 import { basename } from 'path';
-import { CLAUDE_JSON_PATH, STATS_CACHE_PATH, PORT, DEFAULT_CONTEXT_WINDOW_SIZE } from '../server/config.js';
+import { CLAUDE_JSON_PATH, STATS_CACHE_PATH, PORT, DEFAULT_CONTEXT_WINDOW_SIZE, resolveContextWindowSize } from '../server/config.js';
 
 const CLAUDE_JSON = CLAUDE_JSON_PATH;
 const STATS_CACHE = STATS_CACHE_PATH;
