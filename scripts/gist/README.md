@@ -21,4 +21,4 @@ Then add to `~/.claude/settings.json`:
 
 ## Optional: Telemetry enrichment
 
-Set `CLAUDE_TELEMETRY_URL=http://localhost:7890` to get a 3rd line with turn count, tools fired, and active agents (requires [claude-code-telemetry](https://github.com/rossb/claude-code-telemetry) server).
+Set `CLAUDE_TELEMETRY_URL=http://localhost:7890` to get a 3rd line with turn count, tools fired, and active agents (requires [claude-code-telemetry](https://github.com/toolbeltross/claude-code-telemetry) server).

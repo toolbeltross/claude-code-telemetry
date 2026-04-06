@@ -316,7 +316,7 @@ if (mode === 'status') {
     line1 += ` ${DIM}|${RST} ${DIM}${mins}m${secs}s${RST}`;
     if (branch) line1 += ` ${DIM}|${RST} ${MAGENTA}${branch}${RST}`;
     if (worktree) line1 += ` ${DIM}[wt:${worktree}]${RST}`;
-    if (dirName && dirName !== 'rossb') line1 += ` ${DIM}|${RST} ${WHITE}${dirName}${RST}`;
+    if (dirName) line1 += ` ${DIM}|${RST} ${WHITE}${dirName}${RST}`;
     if (linesAdded || linesRemoved) line1 += ` ${GREEN}+${linesAdded}${RST}${RED}-${linesRemoved}${RST}`;
     process.stdout.write(line1 + '\n');
 
