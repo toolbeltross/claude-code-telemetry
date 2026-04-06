@@ -22,8 +22,6 @@ const STATUS_URL = `${BASE_URL}/api/status`;
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const FORCE_STATUSLINE = args.includes('--statusline') || args.includes('--force-statusline');
-const targetIdx = args.indexOf('--target');
-const TARGET = targetIdx >= 0 ? args[targetIdx + 1] : null; // 'rossb', 'Ross Here', or 'all'
 
 /**
  * Classify existing statusLine config.
@@ -38,34 +36,9 @@ function classifyStatusline(settings) {
   return 'customized';
 }
 
-/** Resolve settings.json path for a given user profile name */
-function settingsPathForProfile(profileName) {
-  if (!profileName) return join(homedir(), '.claude', 'settings.json');
-  // On Windows, user profiles are at C:/Users/<name>/.claude/settings.json
-  if (platform() === 'win32') {
-    const userDir = join(dirname(homedir()), profileName);
-    return join(userDir, '.claude', 'settings.json');
-  }
+/** Get the settings.json path for the current user */
+function getSettingsPath() {
   return join(homedir(), '.claude', 'settings.json');
-}
-
-/** Get list of target settings paths to write */
-function getTargetPaths() {
-  if (!TARGET || TARGET === 'all') {
-    // Write to both known profiles on this machine
-    const paths = [join(homedir(), '.claude', 'settings.json')];
-    // On Windows, try the other profile
-    if (platform() === 'win32') {
-      const currentUser = homedir().split(/[\\/]/).pop();
-      const otherProfiles = ['Ross Here', 'rossb'].filter(p => p !== currentUser);
-      for (const p of otherProfiles) {
-        const otherPath = settingsPathForProfile(p);
-        if (existsSync(dirname(otherPath))) paths.push(otherPath);
-      }
-    }
-    return TARGET === 'all' ? paths : [paths[0]]; // default = current user only
-  }
-  return [settingsPathForProfile(TARGET)];
 }
 
 /** Build the canonical hook configuration */
@@ -81,9 +54,6 @@ function buildHookConfig(existingSettings) {
         return !entry.hooks.some((h) =>
           h.command?.includes(marker) || h.command?.includes(HOOK_URL) || h.command?.includes(STATUS_URL) ||
           h.command?.includes('progress-tracker') || h.command?.includes('statusline.js') ||
-          h.prompt?.includes('Anthropic Expert Supervisory') || h.prompt?.includes('dedicated tool handles better') ||
-          h.prompt?.includes('ADDITIVE ONLY') || h.prompt?.includes('supervisory quality gate') ||
-          h.prompt?.includes('Subagent did not complete') ||
           h.type === 'agent'
         );
       }
@@ -225,15 +195,13 @@ async function deployToPath(settingsPath) {
 }
 
 async function main() {
-  const targets = getTargetPaths();
-  console.log(`\nSetup hooks v2 — ${DRY_RUN ? 'DRY RUN' : 'LIVE'}${TARGET ? ` (target: ${TARGET})` : ''}`);
+  const settingsPath = getSettingsPath();
+  console.log(`\nSetup hooks v2 — ${DRY_RUN ? 'DRY RUN' : 'LIVE'}`);
   console.log('');
 
-  for (const path of targets) {
-    console.log(`Profile: ${path}`);
-    await deployToPath(path);
-    console.log('');
-  }
+  console.log(`Profile: ${settingsPath}`);
+  await deployToPath(settingsPath);
+  console.log('');
 
   console.log('  Endpoints:');
   console.log('    Tool events:     ' + HOOK_URL);
@@ -262,10 +230,7 @@ async function main() {
 
   if (IS_WSL) {
     console.log('  [WSL] Detected WSL environment. Paths use WSL filesystem.');
-    console.log('  [WSL] To also cover Windows-native, run: node scripts/setup-hooks.js --target all');
-    console.log('');
-  } else if (platform() === 'win32') {
-    console.log('  [Windows] To deploy to both profiles: node scripts/setup-hooks.js --target all');
+    console.log('  [WSL] To also cover Windows-native, run setup from a Windows terminal too.');
     console.log('');
   }
 

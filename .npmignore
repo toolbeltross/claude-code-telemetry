@@ -18,3 +18,9 @@ scripts/tool-validator-v2.js
 tests/
 CLAUDE.md
 .claude/
+.vite/
+
+# Build/publish artifacts
+PLAN-*.md
+*.tgz
+hook-debug.log

@@ -726,3 +726,295 @@ Append-only log of supervisory agent findings. The agent reads this to learn fro
 - **2026-04-05 18:56:39** | `6a6347c4` | Turn 5 | $2.87 | Context 100% | Opus | 19 tools
 
 - **2026-04-05 18:57:45** | `6a6347c4` | Turn 6 | $1.02 | Context 100% | Opus | 23 tools
+
+- **2026-04-05 19:08:01** | `a36531ec` | Turn 2 | $2.17 | Context 27% | Opus | 19 tools
+
+- **2026-04-05 19:26:59** | `a36531ec` | Turn 3 | $1.80 | Context 29% | Opus | 29 tools
+
+- **2026-04-05 19:27:54** | `6a6347c4` | Turn 7 | $12.92 | Context 100% | Opus | 29 tools
+
+- **2026-04-05 19:30:30** | `a36531ec` | Turn 4 | $1.80 | Context 29% | Opus | 29 tools
+
+- **2026-04-05 19:40:01** | `76cd753d` | Turn 1 | $1.31 | Context 66% | Opus | 62 tools
+
+- **2026-04-05 19:41:31** | `a36531ec` | Turn 5 | $1.80 | Context 29% | Opus | 29 tools
+
+- **2026-04-05 19:59:39** | `76cd753d` | Turn 2 | $1.31 | Context 66% | Opus | 62 tools
+
+- **2026-04-05 20:01:49** | `76cd753d` | Turn 3 | $7.14 | Context 68% | Opus | 73 tools
+
+- **2026-04-05 20:08:52** | `76cd753d` | Turn 4 | $2.83 | Context 76% | Opus | 82 tools
+
+- **2026-04-05 20:11:51** | `76cd753d` | Turn 5 | $1.29 | Context 79% | Opus | 89 tools
+
+- **2026-04-05 20:14:42** | `a36531ec` | Turn 1 | $2.42 | Context 30% | Opus | 4 tools
+
+- **2026-04-05 20:17:02** | `76cd753d` | Turn 6 | $0.61 | Context 89% | Opus | 105 tools
+
+- **2026-04-05 20:22:17** | `76cd753d` | Turn 7 | $13.40 | Context 87% | Opus | 110 tools
+
+- **2026-04-05 20:23:09** | `76cd753d` | Turn 8 | $2.33 | Context 90% | Opus | 114 tools
+
+- **2026-04-05 20:27:58** | `76cd753d` | Turn 9 | $7.55 | Context 97% | Opus | 132 tools
+
+- **2026-04-05 20:28:52** | `a36531ec` | Turn 2 | $2.08 | Context 34% | Opus | 18 tools
+
+- **2026-04-05 20:41:04** | `58a7131a` | Turn 1 | $1.40 | Context 66% | Opus | 70 tools
+
+- **2026-04-05 20:50:03** | `58a7131a` | Turn 2 | $3.63 | Context 75% | Opus | 83 tools
+
+- **2026-04-05 21:00:51** | `58a7131a` | Turn 3 | $2.35 | Context 80% | Opus | 98 tools
+
+- **2026-04-05 21:01:53** | `a36531ec` | Turn 3 | $2.61 | Context 40% | Opus | 49 tools
+
+- **2026-04-05 21:12:50** | `a36531ec` | Turn 4 | $2.61 | Context 40% | Opus | 49 tools
+
+- **2026-04-05 21:30:10** | `a36531ec` | Turn 1 | $3.44 | Context 41% | Opus | 1 tools
+
+- **2026-04-05 21:33:06** | `58a7131a` | Turn 1 | $2.63 | Context 80% | Opus | 1 tools
+
+- **2026-04-05 21:37:48** | `58a7131a` | Turn 2 | $2.63 | Context 80% | Opus | 1 tools
+
+- **2026-04-05 21:47:34** | `58a7131a` | Turn 3 | $2.34 | Context 100% | Opus | 18 tools
+
+- **2026-04-05 21:49:33** | `58a7131a` | Turn 4 | $3.37 | Context 100% | Opus | 21 tools
+
+- **2026-04-05 21:58:17** | `58a7131a` | Turn 5 | $3.37 | Context 100% | Opus | 21 tools
+
+- **2026-04-05 22:26:42** | `58a7131a` | Turn 6 | $1.49 | Context 100% | Opus | 31 tools
+
+- **2026-04-05 22:31:12** | `a36531ec` | Turn 1 | $4.93 | Context 41% | Opus | 1 tools
+
+- **2026-04-05 22:50:29** | `a36531ec` | Turn 2 | $4.98 | Context 42% | Opus | 5 tools
+
+- **2026-04-05 22:57:35** | `a36531ec` | Turn 3 | $5.13 | Context 42% | Opus | 14 tools
+
+- **2026-04-05 23:28:00** | `95d94c31` | Turn 1 | $1.00 | Context 54% | Opus | 19 tools
+
+- **2026-04-05 23:31:33** | `f42e5ea9` | Turn 1 | $1.70 | Context 35% | Opus | 15 tools
+
+- **2026-04-05 23:34:48** | `f42e5ea9` | Turn 2 | $1.70 | Context 35% | Opus | 15 tools
+
+- **2026-04-05 23:59:27** | `6a6347c4` | Turn 1 | $14.21 | Context 100% | Opus | 6 tools
+
+- **2026-04-06 00:14:42** | `95d94c31` | Turn 2 | $1.86 | Context 92% | Opus | 182 tools
+
+- **2026-04-06 00:20:19** | `126ac415` | Turn 1 | $2.79 | Context 15% | Opus | 9 tools
+
+- **2026-04-06 00:50:00** | `126ac415` | Turn 2 | $2.79 | Context 15% | Opus | 9 tools
+
+- **2026-04-06 01:02:23** | `95d94c31` | Turn 1 | $8.74 | Context 92% | Opus | 4 tools
+
+- **2026-04-06 01:11:09** | `95d94c31` | Turn 2 | $2.63 | Context 100% | Opus | 13 tools
+
+- **2026-04-06 01:59:37** | `27aadb76` | Turn 1 | $1.39 | Context 75% | Opus | 32 tools
+
+- **2026-04-06 02:21:30** | `27aadb76` | Turn 2 | $1.39 | Context 75% | Opus | 32 tools
+
+- **2026-04-06 02:57:00** | `27aadb76` | Turn 3 | $9.35 | Context 76% | Opus | 38 tools
+
+- **2026-04-06 03:11:26** | `27aadb76` | Turn 4 | $9.35 | Context 76% | Opus | 38 tools
+
+- **2026-04-06 04:02:22** | `27aadb76` | Turn 5 | $3.77 | Context 86% | Opus | 40 tools
+
+- **2026-04-06 04:05:00** | `27aadb76` | Turn 6 | $5.48 | Context 87% | Opus | 43 tools
+
+- **2026-04-06 04:08:50** | `27aadb76` | Turn 7 | $5.48 | Context 87% | Opus | 43 tools
+
+- **2026-04-06 04:16:04** | `27aadb76` | Turn 8 | $2.65 | Context 91% | Opus | 44 tools
+
+- **2026-04-06 04:21:22** | `27aadb76` | Turn 9 | $1.92 | Context 94% | Opus | 47 tools
+
+- **2026-04-06 04:23:00** | `814a2224` | Turn 1 | $0.82 | Context 38% | Opus | 1 tools
+
+- **2026-04-06 04:23:28** | `126ac415` | Turn 1 | $0.76 | Context 23% | Opus | 13 tools
+
+- **2026-04-06 04:30:35** | `126ac415` | Turn 2 | $0.85 | Context 24% | Opus | 14 tools
+
+- **2026-04-06 04:33:26** | `814a2224` | Turn 1 | $2.29 | Context 45% | Opus | 9 tools
+
+- **2026-04-06 04:34:57** | `126ac415` | Turn 3 | $1.02 | Context 24% | Opus | 16 tools
+
+- **2026-04-06 04:35:17** | `c51a13c3` | Turn 1 | $1.32 | Context 26% | Opus | 55 tools
+
+- **2026-04-06 04:37:20** | `814a2224` | Turn 2 | $2.90 | Context 52% | Opus | 16 tools
+
+- **2026-04-06 04:37:50** | `126ac415` | Turn 4 | $0.37 | Context 25% | Opus | 18 tools
+
+- **2026-04-06 04:39:12** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 04:39:30** | `126ac415` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 04:39:34** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 04:45:37** | `814a2224` | Turn 1 | $3.43 | Context 54% | Opus | 2 tools
+
+- **2026-04-06 04:46:10** | `126ac415` | Turn 1 | $0.83 | Context 33% | Opus | 9 tools
+
+- **2026-04-06 04:47:07** | `814a2224` | Turn 2 | $3.43 | Context 54% | Opus | 2 tools
+
+- **2026-04-06 04:48:40** | `814a2224` | Turn 3 | $3.94 | Context 56% | Opus | 3 tools
+
+- **2026-04-06 04:53:33** | `814a2224` | Turn 4 | $3.52 | Context 59% | Opus | 5 tools
+
+- **2026-04-06 04:59:55** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 05:09:09** | `126ac415` | Turn 1 | $1.58 | Context 35% | Opus | 5 tools
+
+- **2026-04-06 05:09:50** | `126ac415` | Turn 2 | $1.58 | Context 35% | Opus | 5 tools
+
+- **2026-04-06 05:10:41** | `126ac415` | Turn 3 | $1.58 | Context 35% | Opus | 5 tools
+
+- **2026-04-06 05:25:19** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 05:26:00** | `126ac415` | Turn 1 | $1.72 | Context 37% | Opus | 1 tools
+
+- **2026-04-06 05:46:07** | `814a2224` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 05:47:46** | `c51a13c3` | Turn 1 | $1.38 | Context 48% | Opus | 6 tools
+
+- **2026-04-06 05:52:37** | `814a2224` | Turn 1 | $3.48 | Context 62% | Opus | 4 tools
+
+- **2026-04-06 05:54:32** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 05:59:31** | `814a2224` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 06:03:34** | `814a2224` | Turn 1 | $3.89 | Context 65% | Opus | 4 tools
+
+- **2026-04-06 06:05:46** | `814a2224` | Turn 2 | $3.89 | Context 65% | Opus | 4 tools
+
+- **2026-04-06 06:07:23** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 06:07:48** | `814a2224` | Turn 1 | $3.01 | Context 66% | Opus | 1 tools
+
+- **2026-04-06 06:15:01** | `814a2224` | Turn 2 | $3.01 | Context 66% | Opus | 1 tools
+
+- **2026-04-06 06:17:11** | `814a2224` | Turn 3 | $3.01 | Context 66% | Opus | 1 tools
+
+- **2026-04-06 06:23:08** | `814a2224` | Turn 4 | $4.91 | Context 71% | Opus | 10 tools
+
+- **2026-04-06 06:24:37** | `814a2224` | Turn 5 | $4.91 | Context 71% | Opus | 10 tools
+
+- **2026-04-06 06:25:16** | `814a2224` | Turn 6 | $4.91 | Context 71% | Opus | 10 tools
+
+- **2026-04-06 06:27:12** | `814a2224` | Turn 7 | $5.34 | Context 72% | Opus | 11 tools
+
+- **2026-04-06 06:29:18** | `814a2224` | Turn 8 | $5.59 | Context 73% | Opus | 13 tools
+
+- **2026-04-06 06:29:27** | `814a2224` | Turn 9 | $5.59 | Context 73% | Opus | 13 tools
+
+- **2026-04-06 06:30:09** | `814a2224` | Turn 10 | $5.59 | Context 73% | Opus | 13 tools
+
+- **2026-04-06 06:36:40** | `814a2224` | Turn 11 | $5.59 | Context 73% | Opus | 13 tools
+
+- **2026-04-06 06:39:58** | `814a2224` | Turn 12 | $5.59 | Context 73% | Opus | 13 tools
+
+- **2026-04-06 06:49:31** | `814a2224` | Turn 13 | $2.02 | Context 84% | Opus | 24 tools
+
+- **2026-04-06 06:51:16** | `814a2224` | Turn 14 | $4.66 | Context 84% | Opus | 26 tools
+
+- **2026-04-06 06:59:22** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 07:01:17** | `814a2224` | Turn 1 | $1.55 | Context 89% | Opus | 5 tools
+
+- **2026-04-06 07:04:52** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 07:07:58** | `814a2224` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 07:08:36** | `c51a13c3` | Turn ? | $? | Context ?% | ? | ? tools
+
+- **2026-04-06 07:11:14** | `814a2224` | Turn 1 | $3.24 | Context 90% | Opus | 2 tools
+
+- **2026-04-06 07:11:44** | `c51a13c3` | Turn 1 | $3.54 | Context 70% | Opus | 6 tools
+
+- **2026-04-06 07:36:46** | `814a2224` | Turn 2 | $0.75 | Context 100% | Opus | 114 tools
+
+- **2026-04-06 07:37:53** | `814a2224` | Turn 3 | $0.75 | Context 100% | Opus | 114 tools
+
+- **2026-04-06 07:38:16** | `814a2224` | Turn 4 | $0.75 | Context 100% | Opus | 114 tools
+
+- **2026-04-06 07:41:21** | `c51a13c3` | Turn 2 | $4.39 | Context 74% | Opus | 22 tools
+
+- **2026-04-06 07:43:06** | `32ea33fc` | Turn 1 | $1.09 | Context 39% | Opus | 26 tools
+
+- **2026-04-06 07:43:43** | `c51a13c3` | Turn 3 | $4.39 | Context 74% | Opus | 22 tools
+
+- **2026-04-06 07:48:34** | `32ea33fc` | Turn 2 | $2.48 | Context 57% | Opus | 42 tools
+
+- **2026-04-06 07:51:39** | `32ea33fc` | Turn 3 | $3.01 | Context 63% | Opus | 45 tools
+
+- **2026-04-06 07:59:52** | `32ea33fc` | Turn 4 | $1.79 | Context 76% | Opus | 75 tools
+
+- **2026-04-06 08:01:32** | `32ea33fc` | Turn 5 | $1.77 | Context 76% | Opus | 76 tools
+
+- **2026-04-06 08:07:21** | `32ea33fc` | Turn 6 | $3.46 | Context 88% | Opus | 87 tools
+
+- **2026-04-06 08:09:14** | `32ea33fc` | Turn 7 | $3.77 | Context 93% | Opus | 94 tools
+
+- **2026-04-06 08:09:57** | `32ea33fc` | Turn 8 | $4.61 | Context 96% | Opus | 100 tools
+
+- **2026-04-06 08:17:22** | `32ea33fc` | Turn 9 | $0.00 | Context 0% | ? | 107 tools
+
+- **2026-04-06 08:27:14** | `c51a13c3` | Turn 4 | $2.27 | Context 85% | Opus | 136 tools
+
+- **2026-04-06 08:28:13** | `32ea33fc` | Turn 10 | $4.10 | Context 100% | Opus | 119 tools
+
+- **2026-04-06 08:36:22** | `c51a13c3` | Turn 5 | $2.14 | Context 87% | Opus | 137 tools
+
+- **2026-04-06 08:37:12** | `32ea33fc` | Turn 11 | $5.86 | Context 100% | Opus | 131 tools
+
+- **2026-04-06 08:37:21** | `c51a13c3` | Turn 6 | $2.14 | Context 87% | Opus | 137 tools
+
+- **2026-04-06 08:38:19** | `7bb1982b` | Turn 1 | $2.17 | Context 27% | Opus | 18 tools
+
+- **2026-04-06 08:38:23** | `c51a13c3` | Turn 7 | $2.14 | Context 87% | Opus | 137 tools
+
+- **2026-04-06 08:55:25** | `32ea33fc` | Turn 12 | $0.70 | Context 100% | Opus | 137 tools
+
+- **2026-04-06 09:10:25** | `7bb1982b` | Turn 2 | $3.11 | Context 51% | Opus | 35 tools
+
+- **2026-04-06 09:11:13** | `c51a13c3` | Turn 8 | $2.27 | Context 87% | Opus | 138 tools
+
+- **2026-04-06 09:12:01** | `32ea33fc` | Turn 13 | $1.76 | Context 100% | Opus | 139 tools
+
+- **2026-04-06 09:13:44** | `c51a13c3` | Turn 9 | $2.82 | Context 88% | Opus | 139 tools
+
+- **2026-04-06 09:18:17** | `7bb1982b` | Turn 3 | $0.97 | Context 65% | Opus | 69 tools
+
+- **2026-04-06 09:22:03** | `32ea33fc` | Turn 14 | $3.97 | Context 100% | Opus | 170 tools
+
+- **2026-04-06 09:44:07** | `32ea33fc` | Turn 15 | $20.01 | Context 100% | Opus | 172 tools
+
+- **2026-04-06 09:46:41** | `32ea33fc` | Turn 16 | $21.95 | Context 100% | Opus | 173 tools
+
+- **2026-04-06 09:49:02** | `32ea33fc` | Turn 17 | $22.50 | Context 100% | Opus | 175 tools
+
+- **2026-04-06 09:49:39** | `32ea33fc` | Turn 18 | $22.50 | Context 100% | Opus | 175 tools
+
+- **2026-04-06 09:51:45** | `32ea33fc` | Turn 19 | $22.50 | Context 100% | Opus | 175 tools
+
+- **2026-04-06 09:57:29** | `32ea33fc` | Turn 20 | $2.80 | Context 100% | Opus | 182 tools
+
+- **2026-04-06 10:05:22** | `32ea33fc` | Turn 21 | $2.80 | Context 100% | Opus | 182 tools
+
+- **2026-04-06 10:10:30** | `c51a13c3` | Turn 10 | $2.78 | Context 88% | Opus | 140 tools
+
+- **2026-04-06 10:15:32** | `c51a13c3` | Turn 11 | $2.78 | Context 88% | Opus | 140 tools
+
+- **2026-04-06 14:35:16** | `32ea33fc` | Turn 1 | $9.26 | Context 100% | Opus | 5 tools
+
+- **2026-04-06 14:53:54** | `32ea33fc` | Turn 2 | $10.31 | Context 100% | Opus | 6 tools
+
+- **2026-04-06 14:57:17** | `32ea33fc` | Turn 3 | $10.31 | Context 100% | Opus | 6 tools
+
+- **2026-04-06 14:58:10** | `32ea33fc` | Turn 4 | $10.31 | Context 100% | Opus | 6 tools
+
+- **2026-04-06 15:00:06** | `32ea33fc` | Turn 5 | $2.24 | Context 100% | Opus | 8 tools
+
+- **2026-04-06 15:31:28** | `32ea33fc` | Turn 6 | $10.56 | Context 100% | Opus | 11 tools
+
+- **2026-04-06 15:32:12** | `32ea33fc` | Turn 7 | $10.56 | Context 100% | Opus | 11 tools
+
+- **2026-04-06 18:06:01** | `bed7fa7d` | Turn 1 | $4.82 | Context 25% | Opus | 3 tools
+
+- **2026-04-06 18:57:15** | `bed7fa7d` | Turn 2 | $4.99 | Context 25% | Opus | 6 tools

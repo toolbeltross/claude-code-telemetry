@@ -10,7 +10,7 @@ Real-time monitoring dashboard for Claude Code CLI sessions. See what Claude is 
 - **Turn Tracking** — per-turn cost, velocity, cost chart over time
 - **Model Breakdown** — cost per model donut chart
 - **Performance Metrics** — CLI frame timing (FPS, p50/p95/p99)
-- **Supervisory Agent** — 3-layer validation system (deterministic + LLM + deep review)
+- **Tool Validation** — deterministic tool-usage validation (blocks `cat` when `Read` should be used, etc.)
 - **Cross-platform** — works with CLI, VS Code, Desktop, WSL, PowerShell, bash
 
 ## Quick Install
@@ -26,7 +26,7 @@ Then open http://localhost:7890 in your browser.
 ## Alternative: Clone & Dev
 
 ```bash
-git clone https://github.com/rossb/claude-code-telemetry.git
+git clone https://github.com/toolbeltross/claude-code-telemetry.git
 cd claude-code-telemetry
 npm install
 npm run setup-hooks       # configure Claude Code hooks
@@ -41,14 +41,16 @@ npm run dev               # Vite on :5173, API on :7890
 
 ## What `setup` Does
 
-1. **Hooks** — Registers 10 Claude Code hooks in `~/.claude/settings.json`:
+1. **Hooks** — Registers 12 Claude Code hooks in `~/.claude/settings.json`:
    - `SessionStart` — auto-starts the telemetry server in the background
    - `PreToolUse:Bash` — validates tool usage (blocks `cat` when `Read` should be used, etc.)
    - `PostToolUse` / `PostToolUseFailure` — forwards tool events to the dashboard
-   - `Stop` — marks turn boundaries + runs supervisory agent review
+   - `Stop` — marks turn boundaries
    - `PreCompact` — detects context compaction events
    - `SubagentStart` / `SubagentStop` — tracks agent lifecycle
    - `UserPromptSubmit` — captures what question Claude is answering
+   - `ConfigChange` — logs settings modifications
+   - `TaskCompleted` — logs task completions
    - `statusLine` — sends live session data (cost, context, model)
 
 2. **Skills** — Installs `/telemetry` and `/telemetry-setup` as Claude Code skills
@@ -95,10 +97,17 @@ Claude Code hooks → hook-forwarder.js → POST to server → store → WebSock
 - **Data**: Reads `~/.claude.json` and `~/.claude/stats-cache.json` (no database)
 - **Hooks**: Claude Code hooks POST tool events, prompts, agent activity to the server
 
+## Privacy
+
+The dashboard reads `~/.claude.json` and `~/.claude/stats-cache.json` for session data.
+For Max plan usage detection, it reads OAuth credentials from `~/.claude/.credentials.json`
+(or macOS Keychain). Credentials are used locally to check plan limits — they are never
+transmitted anywhere except Anthropic's API. All data stays on your machine.
+
 ## Troubleshooting
 
-**`npm start` fails on Windows**
-The `cross-env NODE_ENV=production` syntax can fail on cmd.exe. Use `npm run dev` or `node server/index.js` directly.
+**`npm start` not working**
+Use `npm run dev` for development or `node server/index.js` directly.
 
 **VS Code panel hooks not firing**
 Known Anthropic bug with the graphical panel. Run `claude` in the VS Code integrated terminal as a workaround.
