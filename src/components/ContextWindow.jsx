@@ -1,8 +1,34 @@
+import { useState } from 'react';
 import InfoIcon, { Legend } from './InfoIcon';
 
+const CONTEXT_SIZES = [200_000, 1_000_000];
+const STORAGE_KEY = 'telemetry-ctx-override';
+
+function loadOverride() {
+  try { return parseInt(localStorage.getItem(STORAGE_KEY), 10) || null; } catch { return null; }
+}
+
 export default function ContextWindow({ session, liveSession }) {
+  const [override, setOverride] = useState(loadOverride);
   const live = liveSession?.context_window;
   const liveData = liveSession; // full live session for delta tracking
+
+  function cycleSize() {
+    const reported = live?.context_window_size ?? null;
+    // Build options: reported value (if any) + all standard sizes (deduplicated)
+    const options = [...new Set([reported, ...CONTEXT_SIZES].filter(Boolean))];
+    const currentIdx = options.indexOf(override ?? reported);
+    const nextIdx = (currentIdx + 1) % options.length;
+    const next = options[nextIdx];
+    // If cycling back to the reported value, clear the override
+    if (next === reported) {
+      localStorage.removeItem(STORAGE_KEY);
+      setOverride(null);
+    } else {
+      localStorage.setItem(STORAGE_KEY, String(next));
+      setOverride(next);
+    }
+  }
 
   if (!session?.tokens && !live) {
     return (
@@ -14,21 +40,25 @@ export default function ContextWindow({ session, liveSession }) {
 
   // Prefer live statusLine data when available
   if (live) {
-    const rawCtxSize = live._resolvedSize ?? live.context_window_size;
-    const contextLimit = rawCtxSize ?? null; // null = unknown, don't guess
+    const reported = live._resolvedSize ?? live.context_window_size ?? null;
+    const contextLimit = override ?? reported; // user override wins
     const totalInput = live.total_input_tokens ?? 0;
-    const fillPct = live.used_percentage ?? 0;
+    // Recalculate fill percentage based on the active limit
+    const fillPct = contextLimit && totalInput > 0
+      ? Math.min(100, Math.round((totalInput / contextLimit) * 100))
+      : (contextLimit ? (live.used_percentage ?? 0) : null);
     const usage = live.current_usage || {};
     const input = usage.input_tokens ?? 0;
     const output = usage.output_tokens ?? 0;
     const cacheRead = usage.cache_read_input_tokens ?? 0;
     const cacheWrite = usage.cache_creation_input_tokens ?? 0;
     const cacheHit = cacheRead > 0 ? ((cacheRead / (cacheRead + input || 1)) * 100).toFixed(1) : null;
-    const barColor = fillPct > 80 ? 'bg-red' : fillPct > 50 ? 'bg-amber' : 'bg-accent';
+    const barColor = fillPct !== null ? (fillPct > 80 ? 'bg-red' : fillPct > 50 ? 'bg-amber' : 'bg-accent') : 'bg-gray-600';
+    const isOverridden = override !== null && override !== reported;
 
     // Compute compaction base: context level right after last compaction
     const compactPct = getCompactionBasePct(liveSession);
-    const newContentPct = Math.max(0, fillPct - compactPct);
+    const newContentPct = fillPct !== null ? Math.max(0, fillPct - compactPct) : 0;
     const compactCount = (liveSession?._compactEvents || []).length;
     const lastCompact = liveSession?._lastCompactAt;
     const compactAgo = lastCompact ? Math.round((Date.now() - lastCompact) / 1000) : null;
@@ -47,7 +77,7 @@ export default function ContextWindow({ session, liveSession }) {
             </InfoIcon></span>
           <div className="flex-1 min-w-0">
             <div className="h-4 rounded-full bg-gray-800 overflow-hidden relative">
-              {compactPct > 0 ? (
+              {compactPct > 0 && fillPct !== null ? (
                 <div className="h-full flex" style={{ width: `${fillPct}%` }}>
                   <div
                     className="h-full context-compacted-bar transition-all duration-500"
@@ -63,7 +93,7 @@ export default function ContextWindow({ session, liveSession }) {
               ) : (
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${barColor}`}
-                  style={{ width: `${fillPct}%` }}
+                  style={{ width: fillPct !== null ? `${fillPct}%` : '0%' }}
                 />
               )}
               <span
@@ -78,11 +108,13 @@ export default function ContextWindow({ session, liveSession }) {
               />
             </div>
           </div>
-          <span className="text-xs text-gray-400 shrink-0">
-            {formatTokens(totalInput)} / {contextLimit !== null ? formatTokens(contextLimit) : <span className="inline-block animate-pulse text-gray-500" title="Context window size not yet reported by Claude Code">?</span>}
+          <span className="text-xs text-gray-400 shrink-0 inline-flex items-center">
+            {formatTokens(totalInput)} /&nbsp;{contextLimit !== null
+              ? <button onClick={cycleSize} className={`cursor-pointer hover:underline ${isOverridden ? 'text-cyan' : 'text-gray-400'}`} title={`Click to cycle: ${CONTEXT_SIZES.map(s => formatTokens(s)).join(' / ')}${isOverridden ? ' (overridden)' : ''}`}>{formatTokens(contextLimit)}</button>
+              : <button onClick={cycleSize} className="animate-pulse text-gray-500 cursor-pointer hover:text-gray-300" title="Context size unknown — click to set manually">?</button>}
           </span>
-          <span className={`text-2xl font-mono font-bold shrink-0 ${fillPct > 80 ? 'text-red' : fillPct > 60 ? 'text-amber' : 'text-gray-200'}`}>
-            {contextLimit !== null ? `${fillPct}%` : <span className="animate-pulse text-gray-500" title="Waiting for context window size">?</span>}
+          <span className={`text-2xl font-mono font-bold shrink-0 ${fillPct !== null ? (fillPct > 80 ? 'text-red' : fillPct > 60 ? 'text-amber' : 'text-gray-200') : 'text-gray-500'}`}>
+            {fillPct !== null ? `${fillPct}%` : <span className="animate-pulse">?</span>}
           </span>
         </div>
         {/* Row 2: Token breakdown — all horizontal, label above value */}
@@ -104,18 +136,20 @@ export default function ContextWindow({ session, liveSession }) {
           />
         </div>
         {/* Row 3: Velocity, turns remaining, warnings */}
-        <VelocityRow liveData={liveData} />
+        <VelocityRow liveData={liveData} contextLimit={contextLimit} />
       </div>
     );
   }
 
   // Fallback to file-based session data
   const { input, output, cacheRead, cacheWrite } = session.tokens;
-  const contextLimit = getContextLimit(session.primaryModelId); // may return null
+  const reported = getContextLimit(session.primaryModelId);
+  const contextLimit = override ?? reported;
   const effectiveTokens = input;
   const fillPct = contextLimit ? Math.min((effectiveTokens / contextLimit) * 100, 100) : null;
   const barColor = fillPct !== null ? (fillPct > 80 ? 'bg-red' : fillPct > 50 ? 'bg-amber' : 'bg-accent') : 'bg-gray-600';
   const cacheHit = cacheRead > 0 ? ((cacheRead / (cacheRead + input || 1)) * 100).toFixed(1) : null;
+  const isOverridden = override !== null && override !== reported;
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-lg px-4 py-2 h-full flex flex-col justify-center">
@@ -145,11 +179,13 @@ export default function ContextWindow({ session, liveSession }) {
             />
           </div>
         </div>
-        <span className="text-xs text-gray-400 shrink-0">
-          {formatTokens(effectiveTokens)} / {contextLimit ? formatTokens(contextLimit) : <span className="inline-block animate-pulse text-gray-500" title="Context window size unknown for this model">?</span>}
+        <span className="text-xs text-gray-400 shrink-0 inline-flex items-center">
+          {formatTokens(effectiveTokens)} /&nbsp;{contextLimit
+            ? <button onClick={cycleSize} className={`cursor-pointer hover:underline ${isOverridden ? 'text-cyan' : 'text-gray-400'}`} title={`Click to cycle: ${CONTEXT_SIZES.map(s => formatTokens(s)).join(' / ')}${isOverridden ? ' (overridden)' : ''}`}>{formatTokens(contextLimit)}</button>
+            : <button onClick={cycleSize} className="animate-pulse text-gray-500 cursor-pointer hover:text-gray-300" title="Context size unknown — click to set manually">?</button>}
         </span>
         <span className="text-2xl font-mono font-bold text-gray-200 shrink-0">
-          {fillPct !== null ? `${fillPct.toFixed(0)}%` : <span className="animate-pulse text-gray-500" title="Waiting for context window size">?</span>}
+          {fillPct !== null ? `${fillPct.toFixed(0)}%` : <span className="animate-pulse text-gray-500">?</span>}
         </span>
       </div>
       <div className="flex items-center gap-4 mt-1">
@@ -195,11 +231,8 @@ function getCompactionBasePct(liveSession) {
   }
 
   // No turns after compaction yet — estimate from context drop
-  // The compaction typically reduces context to ~40-60% of what it was
-  // Use a conservative estimate: current fill is mostly compacted content
   const preCompactPct = history[lastCompactIdx].ctxPct;
   const currentPct = liveSession.context_window?.used_percentage ?? 0;
-  // If current is less than pre-compact, compaction just happened — most of current is compacted
   if (currentPct < preCompactPct) {
     return currentPct;
   }
@@ -254,11 +287,17 @@ function InlineStat({ label, value, color, tooltip }) {
   );
 }
 
-function VelocityRow({ liveData }) {
+function VelocityRow({ liveData, contextLimit }) {
   if (!liveData) return null;
   const warning = liveData._contextWarning;
   const tokPerTurn = liveData._tokensPerTurn;
-  const turnsLeft = liveData._estimatedTurnsRemaining;
+  // Recalculate turns remaining if we have a user-overridden context limit
+  let turnsLeft = liveData._estimatedTurnsRemaining;
+  if (contextLimit && tokPerTurn > 0) {
+    const totalTokens = liveData.context_window?.total_input_tokens ?? 0;
+    const remaining = contextLimit - totalTokens;
+    turnsLeft = Math.max(0, Math.round(remaining / tokPerTurn));
+  }
 
   // Don't render if nothing to show
   if (!warning && !tokPerTurn) return null;
@@ -298,7 +337,6 @@ function VelocityRow({ liveData }) {
 function getContextLimit(modelId) {
   if (!modelId) return null;
   if (/\[1m\]/.test(modelId)) return 1_000_000;
-  // Only return a value for models we're confident about
   const limits = {
     'claude-opus-4': 200000,
     'claude-sonnet-4': 200000,

@@ -1,11 +1,12 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import InfoIcon, { Legend } from './InfoIcon';
 
-const MODEL_COLORS = {
-  Opus: '#8b5cf6',
-  Sonnet: '#60a5fa',
-  Haiku: '#22d3ee',
-};
+function getModelColor(name) {
+  if (name.startsWith('Opus')) return '#8b5cf6';
+  if (name.startsWith('Sonnet')) return '#60a5fa';
+  if (name.startsWith('Haiku')) return '#22d3ee';
+  return '#3a3a4a';
+}
 
 export default function ModelBreakdown({ session }) {
   if (!session?.models?.length) {
@@ -46,7 +47,7 @@ export default function ModelBreakdown({ session }) {
               {data.map((entry) => (
                 <Cell
                   key={entry.name}
-                  fill={MODEL_COLORS[entry.name] || '#3a3a4a'}
+                  fill={getModelColor(entry.name)}
                 />
               ))}
             </Pie>
@@ -69,7 +70,7 @@ export default function ModelBreakdown({ session }) {
                 className="w-3 h-3 rounded-full"
                 style={{
                   backgroundColor:
-                    MODEL_COLORS[entry.name] || '#3a3a4a',
+                    getModelColor(entry.name),
                 }}
               />
               <span className="text-sm text-gray-300">{entry.name}</span>

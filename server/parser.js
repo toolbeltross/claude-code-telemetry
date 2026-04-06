@@ -33,9 +33,16 @@ function findActiveProject(claudeJson) {
   return best;
 }
 
-/** Format model ID into a friendly short name */
+/** Format model ID into a friendly short name with version */
 export function friendlyModelName(modelId) {
   if (!modelId) return 'unknown';
+  // Extract version from IDs like "claude-opus-4-6", "claude-sonnet-4-6-20250514"
+  const m = modelId.match(/claude-(opus|sonnet|haiku)-(\d+(?:-\d+)?)/i);
+  if (m) {
+    const family = m[1].charAt(0).toUpperCase() + m[1].slice(1);
+    const version = m[2].replace('-', '.');
+    return `${family} ${version}`;
+  }
   if (modelId.includes('opus')) return 'Opus';
   if (modelId.includes('sonnet')) return 'Sonnet';
   if (modelId.includes('haiku')) return 'Haiku';

@@ -28,7 +28,7 @@ export default function CurrentSession({ session, liveSession, displayMode = 'co
     const durationMs = live.cost?.total_duration_ms ?? 0;
     const linesAdded = live.cost?.total_lines_added ?? 0;
     const linesRemoved = live.cost?.total_lines_removed ?? 0;
-    const modelName = live.model?.display_name || live.model?.id || 'Unknown';
+    const modelName = friendlyModel(live.model?.id, live.model?.display_name);
     const toolCount = live._toolCount || 0;
     const lastTool = live._lastTool || '';
     const hasCost = cost > 0;
@@ -137,4 +137,15 @@ function formatTokens(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return String(n);
+}
+
+function friendlyModel(id, displayName) {
+  if (!id) return displayName || 'Unknown';
+  const m = id.match(/claude-(opus|sonnet|haiku)-(\d+(?:-\d+)?)/i);
+  if (m) {
+    const family = m[1].charAt(0).toUpperCase() + m[1].slice(1);
+    const version = m[2].replace('-', '.');
+    return `${family} ${version}`;
+  }
+  return displayName || id;
 }
