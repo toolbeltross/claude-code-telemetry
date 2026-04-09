@@ -21,7 +21,7 @@ You are a visual parity testing agent for the claude-telemetry dashboard. Your j
 ## How to run
 
 ```bash
-cd C:/Users/rossb/OneDrive/Workspace/Code/claude-telemetry
+cd "$(git rev-parse --show-toplevel)"
 node tests/visual-parity/run.js
 ```
 
